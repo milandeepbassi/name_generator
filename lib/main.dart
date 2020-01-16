@@ -31,40 +31,44 @@ class MyApp extends StatelessWidget {
 
 class RandomWordsState extends State<RandomWords> {
   @override
+  final Set<WordPair> _saved = Set<WordPair>();   // Create a set to store saved words.
+  final List<WordPair> _suggestions = <WordPair>[]; // Create a list to hold all items.
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18); // Set font size.
   Widget build(BuildContext context) {
     //final WordPair wordPair = WordPair.random();
     //return Text(wordPair.asPascalCase);
-    return Scaffold (                   // Add from here...
+    return Scaffold ( // Return the layout instead of just text.
       appBar: AppBar(
         title: Text('Startup Name Generator'),
       ),
       body: _buildSuggestions(),
     );
   }
-
-  final List<WordPair> _suggestions = <WordPair>[];
-  final TextStyle _biggerFont = const TextStyle(fontSize: 18);
-
   Widget _buildSuggestions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16),
         itemBuilder: (BuildContext _context, int i) {
           if (i.isOdd) {
-            return Divider();
+            return Divider(); // If the row is odd will add spacing.
           }
-          final int index = i ~/ 2;
+          final int index = i ~/ 2; // Converts row to inndex.
           if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
+            _suggestions.addAll(generateWordPairs().take(10)); // Adds 10 items to list.
           }
           return _buildRow(_suggestions[index]);
         }
     );
   }
   Widget _buildRow(WordPair pair) {
+    final bool alreadySaved = _saved.contains(pair);  // Checks for duplicated.
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
+      ),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border, // Adds the favorite icon with only a border
+        color: alreadySaved ? Colors.red : null, // Makes it red if alreadySaved.
       ),
     );
   }
