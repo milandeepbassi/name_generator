@@ -70,6 +70,15 @@ class RandomWordsState extends State<RandomWords> {
         alreadySaved ? Icons.favorite : Icons.favorite_border, // Adds the favorite icon with only a border
         color: alreadySaved ? Colors.red : null, // Makes it red if alreadySaved.
       ),
+      onTap: (){
+        setState(() {
+          if(alreadySaved){
+            _saved.remove(pair);
+          } else{
+            _saved.add(pair);
+          }
+        });
+      },
     );
   }
 }
